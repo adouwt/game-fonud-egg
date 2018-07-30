@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>静态资源服务器测试</title>
+    <link rel="stylesheet" href="../static/css/style.css" type="text/css" />
+</head>
+<body>
+    <div>测试静态资源文件开始</div>
+    <div>1234567890</div>
+    <div id="a1"></div>
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $.ajax({
+            url: '/thumbService',
+            type: 'POST',
+            dataType:'json',
+            data: {method: '800011', pageNo: 1, pageSize: 15},
+            success: function(data){
+                console.log(data)
+            }
+        });
+        });
+    </script>
+</body>
+</html>
