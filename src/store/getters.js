@@ -1,8 +1,8 @@
-export default {
-  getNewsResult: state => {
-    return state.newsResult
-  },
-  getNewsDetail: state => {
-    return state.newsDetail
-  }
-}
+// export default {
+//   getNewsResult: state => {
+//     return state.newsResult
+//   },
+//   getNewsDetail: state => {
+//     return state.newsDetail
+//   }
+// }
