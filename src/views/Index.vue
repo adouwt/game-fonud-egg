@@ -3,7 +3,7 @@
     <div class="mask">
     </div>
     <div class="content" ref="content" :class="{active: itemShow}">
-      <div v-for="i in amount" :key="i" :data-class="radanGrid(i, amount)" class="item" ref="ITEM" :style="{height: itemWidth + 'px', width: itemWidth + 'px'}" @click="clickone($event)"></div>
+      <div v-for="i in amount" :key="i" :data-class="judgeEqual(i)" class="item" ref="ITEM" :style="{height: itemWidth + 'px', width: itemWidth + 'px'}" @click="clickone($event)"></div>
     </div>
   </div>
 </template>
@@ -17,7 +17,8 @@ export default {
       gridNumber: '',
       vanishTime: '',
       indicator: 0,
-      itemShow: false
+      itemShow: false,
+      randomNumber: ''
     }
   },
   created () {
@@ -25,6 +26,7 @@ export default {
     this.vanishTime = this.$route.query.vanishTime ? this.$route.query.vanishTime : 600
     this.getColumn()
     this.continueClickFunction()
+    this.radanGrid(this.amount)
   },
   components: {
   },
@@ -33,21 +35,24 @@ export default {
       let clientHeight = document.documentElement.clientHeight || document.body.clientHeight
       let clientWidth = document.documentElement.clientWidth || document.body.clientWidth
       this.itemWidth = clientWidth / this.gridNumber
-      this.amount = Math.ceil((clientHeight * clientWidth) / (this.itemWidth * this.itemWidth)) + 5
+      this.amount = Math.ceil((clientHeight * clientWidth) / (this.itemWidth * this.itemWidth)) + 2 // 不能完整平均好 2 是预留量
     },
     clickone (e) {
       var ev = e.currentTarget
       ev.style.animation = 'bg ' + this.vanishTime / 1000 + 's'
       setTimeout(() => {
         ev.style.animation = ''
-      }, 600)
+      }, this.vanishTime)
     },
-    radanGrid (i, number) {
-      let amountRandom = Math.floor(Math.random(number) * number)
-      // console.log(i, amountRandom)
-      if (i === amountRandom) {
+    judgeEqual (i) {
+      console.log(i, this.randomNumber)
+      if (i === this.randomNumber) {
         return 'continueClick'
       }
+    },
+    radanGrid (number) {
+      this.randomNumber = Math.floor(Math.random(number) * number) + 1 - 2 // 1 - amount  减去预留量2·
+      return this.randomNumber
     },
     continueClickFunction () {
       let app = document.getElementById('app')
@@ -91,10 +96,11 @@ export default {
   }
   .content {
     opacity: 1;
-    transform: all 2s;
+    transition: all 2s;
   }
   .content.active {
     opacity: 0;
+    height: 0;
     >div {
       z-index: -10;
     }
