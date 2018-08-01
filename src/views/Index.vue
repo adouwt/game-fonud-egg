@@ -21,7 +21,7 @@ export default {
     }
   },
   created () {
-    this.gridNumber = this.$route.query.gridNumber
+    this.gridNumber = this.$route.query.gridNumber ? this.$route.query.gridNumber : 10
     this.vanishTime = this.$route.query.vanishTime
     this.getColumn()
     this.continueClickFunction()
