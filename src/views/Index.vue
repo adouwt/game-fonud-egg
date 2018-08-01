@@ -40,7 +40,7 @@ export default {
       ev.className = 'active'
       setTimeout(() => {
         ev.className = ''
-      }, 800)
+      }, 600)
     },
     radanGrid (i, number) {
       let amountRandom = Math.floor(Math.random(number) * number)
