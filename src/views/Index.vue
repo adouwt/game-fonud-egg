@@ -22,7 +22,7 @@ export default {
   },
   created () {
     this.gridNumber = this.$route.query.gridNumber ? this.$route.query.gridNumber : 10
-    this.vanishTime = this.$route.query.vanishTime
+    this.vanishTime = this.$route.query.vanishTime ? this.$route.query.vanishTime : 600
     this.getColumn()
     this.continueClickFunction()
   },
@@ -37,9 +37,9 @@ export default {
     },
     clickone (e) {
       var ev = e.currentTarget
-      ev.className = 'active'
+      ev.style.animation = 'bg ' + this.vanishTime / 1000 + 's'
       setTimeout(() => {
-        ev.className = ''
+        ev.style.animation = ''
       }, 600)
     },
     radanGrid (i, number) {
@@ -67,7 +67,6 @@ export default {
 </script>
 
 <style lang="less">
-  // @vanishTime: this.$route.query.vanishTime
   .img-bg {
     width: 100%;
     height: 100vh;
@@ -87,9 +86,6 @@ export default {
           transition: opacity 0.3s;
           position: relative;
           z-index: 1;
-          &.active {
-            animation: bg 1s;
-          }
         }
     }
   }
