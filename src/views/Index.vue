@@ -40,7 +40,7 @@ export default {
       ev.style.animation = 'bg ' + this.vanishTime / 1000 + 's'
       setTimeout(() => {
         ev.style.animation = ''
-      }, 600)
+      }, this.vanishTime)
     },
     radanGrid (i, number) {
       let amountRandom = Math.floor(Math.random(number) * number)
