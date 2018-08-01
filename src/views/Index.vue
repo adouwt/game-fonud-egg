@@ -45,7 +45,6 @@ export default {
       }, this.vanishTime)
     },
     judgeEqual (i) {
-      console.log(i, this.randomNumber)
       if (i === this.randomNumber) {
         return 'continueClick'
       }
