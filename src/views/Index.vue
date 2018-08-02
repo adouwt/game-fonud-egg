@@ -18,7 +18,12 @@ export default {
       vanishTime: '',
       indicator: 0,
       itemShow: false,
-      randomNumber: ''
+      randomNumber: '',
+      option: {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 30000
+      }
     }
   },
   created () {
@@ -27,6 +32,7 @@ export default {
     this.getColumn()
     this.continueClickFunction()
     this.radanGrid(this.amount)
+    this.getCurrentPosition()
   },
   components: {
   },
@@ -65,6 +71,30 @@ export default {
           that.itemShow = true
         }
       })
+    },
+    getCurrentPosition () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition, this.showError, this.option)
+      }
+    },
+    showPosition (position) {
+      let lat = position.coords.latitude
+      let lon = position.coords.longitude
+      let speed = position.coords.speed
+      alert(`纬度${lat}，经度${lon}，${speed }`)
+    },
+    showError (error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert('您拒绝了地理定位服务')
+          break
+        case error.POSITION_UNAVAILABLE:
+          alert('无法获取您的位置')
+          break
+        case error.TIMEOUT:
+          alert('超时')
+          break
+      }
     }
   }
 }
