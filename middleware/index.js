@@ -11,7 +11,7 @@ module.exports = (app) => {
   app.use(json())
   // 应用全局变量
   app.use(async (ctx, next) => {
-    ctx.set('X-Powered-By', 'https://www.laocaibao.com')
+    ctx.set('X-Powered-By', 'https://blog.wtodd.wang')
     ctx.state = Object.assign(ctx.state, {
       version: 'v1.0.0'
     })
@@ -24,7 +24,7 @@ module.exports = (app) => {
   // logger
   app.use(logger({
     env: app.env, // koa 提供的环境变量
-    projectName: 'thumbweb',
+    projectName: 'game',
     appLogLevel: 'debug',
     dir: 'logs',
     serverIp: ip.address()
