@@ -1,9 +1,13 @@
 <template>
   <div class="img-bg">
-    <div class="mask">
-    </div>
-    <div class="content" ref="content" :class="{active: itemShow}">
-      <div v-for="i in amount" :key="i" :data-class="judgeEqual(i)" class="item" ref="ITEM" :style="{height: itemWidth + 'px', width: itemWidth + 'px'}" @click="clickone($event)"></div>
+    <div class="content">
+      <table class="" ref="content" :class="{active: itemShow}">
+        <tr v-for="i in 5" :key="i">
+          <td v-for="j in 6" :key="j" :data-class="judgeEqual(i, j)" @click="clickone($event)" class="item"> 
+            space
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
@@ -12,13 +16,13 @@
 export default {
   data () {
     return {
-      itemHight: '',
-      amount: '',
-      gridNumber: '',
+      gridTr: '',
+      gridTd: '',
       vanishTime: '',
       indicator: 0,
       itemShow: false,
-      randomNumber: '',
+      randomTr: '',
+      randomTd: '',
       option: {
         enableHighAccuracy: true,
         maximumAge: 0,
@@ -27,22 +31,16 @@ export default {
     }
   },
   created () {
-    this.gridNumber = this.$route.query.gridNumber ? this.$route.query.gridNumber : 10
+    this.gridTd = this.$route.query.gridTd ? this.$route.query.gridTd : 10
+    this.gridTr = this.$route.query.gridTr ? this.$route.query.gridTr : 10
     this.vanishTime = this.$route.query.vanishTime ? this.$route.query.vanishTime : 600
-    this.getColumn()
     this.continueClickFunction()
-    this.radanGrid(this.amount)
-    this.getCurrentPosition()
+    this.radanGrid(this.gridTd, this.gridTr)
+    // this.getCurrentPosition()
   },
   components: {
   },
   methods: {
-    getColumn () {
-      let clientHeight = document.documentElement.clientHeight || document.body.clientHeight
-      let clientWidth = document.documentElement.clientWidth || document.body.clientWidth
-      this.itemWidth = clientWidth / this.gridNumber
-      this.amount = Math.ceil((clientHeight * clientWidth) / (this.itemWidth * this.itemWidth)) + 2 // 不能完整平均好 2 是预留量
-    },
     clickone (e) {
       var ev = e.currentTarget
       ev.style.animation = 'bg ' + this.vanishTime / 1000 + 's'
@@ -50,20 +48,23 @@ export default {
         ev.style.animation = ''
       }, this.vanishTime)
     },
-    judgeEqual (i) {
-      if (i === this.randomNumber) {
+    radanGrid (tr, td) {
+      this.randomTr = Math.ceil(Math.random(tr) * tr)
+      this.randomTd = Math.ceil(Math.random(td) * td)
+      console.log(this.randomTr, this.randomTd)
+    },
+    judgeEqual (i, j) {
+      if (i === this.randomTr && j === this.randomTd) {
         return 'continueClick'
       }
-    },
-    radanGrid (number) {
-      this.randomNumber = Math.floor(Math.random(number) * number) + 1 - 2 // 1 - amount  减去预留量2·
-      return this.randomNumber
     },
     continueClickFunction () {
       let app = document.getElementById('app')
       let that = this
       app.addEventListener('click', function (e) {
         console.log('this.indicator', that.indicator)
+        e.stopPropagation;
+        e.preventDefault;
         if (e.target.getAttribute('data-class') === 'continueClick') {
           that.indicator++
         }
@@ -110,28 +111,21 @@ export default {
     background-origin: border-box;
     position: relative;
     z-index: 0;
-    >div:nth-child(2) {
-      position: relative;
-      height: 100vh;
-      div {
-          float: left;
-          // height: 30px;
-          background: rgba(0, 0, 0, 1);
-          transition: opacity 0.3s;
-          position: relative;
-          z-index: 1;
-        }
-    }
   }
   .content {
-    opacity: 1;
-    transition: all 2s;
-  }
-  .content.active {
-    opacity: 0;
-    height: 0;
-    >div {
-      z-index: -10;
+    table {
+      width: 100vw;
+      height: 100vh;
+      border-collapse: collapse;
+      .item {
+        background: #000;
+      }
+    }
+  } 
+  table.active {
+    .item {
+      background: transparent;
+      // transition: opacity 0.3s;
     }
   }
   @keyframes bg {
