@@ -2,9 +2,8 @@
   <div class="img-bg">
     <div class="content">
       <table class="" ref="content" :class="{active: itemShow}">
-        <tr v-for="i in 5" :key="i">
-          <td v-for="j in 6" :key="j" :data-class="judgeEqual(i, j)" @click="clickone($event)" class="item"> 
-            space
+        <tr v-for="i in gridTr" :key="i">
+          <td v-for="j in gridTd" :key="j" :data-class="judgeEqual(i, j)" @click="clickone($event)" class="item">
           </td>
         </tr>
       </table>
@@ -21,8 +20,8 @@ export default {
       vanishTime: '',
       indicator: 0,
       itemShow: false,
-      randomTr: '',
-      randomTd: '',
+      randomTr: 1,
+      randomTd: 1,
       option: {
         enableHighAccuracy: true,
         maximumAge: 0,
@@ -30,13 +29,14 @@ export default {
       }
     }
   },
-  created () {
-    this.gridTd = this.$route.query.gridTd ? this.$route.query.gridTd : 10
-    this.gridTr = this.$route.query.gridTr ? this.$route.query.gridTr : 10
-    this.vanishTime = this.$route.query.vanishTime ? this.$route.query.vanishTime : 600
-    this.continueClickFunction()
+  mounted () {
+    this.gridTd = parseInt(this.$route.query.gridTd ? this.$route.query.gridTd : 10)
+    this.gridTr = parseInt(this.$route.query.gridTr ? this.$route.query.gridTr : 10)
+    this.vanishTime = parseInt(this.$route.query.vanishTime ? this.$route.query.vanishTime : 600)
     this.radanGrid(this.gridTd, this.gridTr)
-    // this.getCurrentPosition()
+  },
+  created () {
+    this.continueClickFunction()
   },
   components: {
   },
@@ -49,8 +49,8 @@ export default {
       }, this.vanishTime)
     },
     radanGrid (tr, td) {
-      this.randomTr = Math.ceil(Math.random(tr) * tr)
-      this.randomTd = Math.ceil(Math.random(td) * td)
+      this.randomTr = Math.floor(Math.random() * (tr - 1) + 1)
+      this.randomTd = Math.floor(Math.random() * (td - 1) + 1)
       console.log(this.randomTr, this.randomTd)
     },
     judgeEqual (i, j) {
@@ -62,9 +62,8 @@ export default {
       let app = document.getElementById('app')
       let that = this
       app.addEventListener('click', function (e) {
-        console.log('this.indicator', that.indicator)
-        e.stopPropagation;
-        e.preventDefault;
+        e.stopPropagation()
+        e.preventDefault()
         if (e.target.getAttribute('data-class') === 'continueClick') {
           that.indicator++
         }
@@ -82,7 +81,7 @@ export default {
       let lat = position.coords.latitude
       let lon = position.coords.longitude
       let speed = position.coords.speed
-      alert(`纬度${lat}，经度${lon}，${speed }`)
+      alert(`纬度${lat}，经度${lon}，${speed}`)
     },
     showError (error) {
       switch (error.code) {
@@ -114,18 +113,21 @@ export default {
   }
   .content {
     table {
-      width: 100vw;
+      width: 100%;
       height: 100vh;
       border-collapse: collapse;
+      overflow: hidden;
+      position: absolute;
       .item {
         background: #000;
       }
     }
-  } 
+  }
   table.active {
+    left: 100%;
+    animation: bg 0.3s;
     .item {
       background: transparent;
-      // transition: opacity 0.3s;
     }
   }
   @keyframes bg {
