@@ -49,8 +49,8 @@ export default {
       }, this.vanishTime)
     },
     radanGrid (tr, td) {
-      this.randomTr = Math.floor(Math.random() * (tr - 1) + 1)
-      this.randomTd = Math.floor(Math.random() * (td - 1) + 1)
+      this.randomTr = parseInt(Math.random() * (tr - 1) + 1)
+      this.randomTd = parseInt(Math.random() * (td - 1) + 1) 
       console.log(this.randomTr, this.randomTd)
     },
     judgeEqual (i, j) {
@@ -117,17 +117,20 @@ export default {
       height: 100vh;
       border-collapse: collapse;
       overflow: hidden;
-      position: absolute;
+      position: relative;
+      opacity: 1;
+      transition: opacity 3s;
       .item {
         background: #000;
+        opacity: 1;
       }
     }
   }
   table.active {
-    left: 100%;
-    animation: bg 0.3s;
+    // left: 100%;
+    opacity: 0;
     .item {
-      background: transparent;
+      opacity: 0;
     }
   }
   @keyframes bg {
